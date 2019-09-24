@@ -6,8 +6,7 @@ Created on Thu Apr 18 21:36:05 2019
 """
 
 import numpy as np
-import random as rd
-from rubik_qol import nl, dc
+from rubik_qol import sequencetoreadeable,readeabletosequence,invertsequence,dc
 
 class cube:    
     def __init__(self):
@@ -25,6 +24,9 @@ class cube:
         self.b_layer[:] = "o"
         self.r_layer[:] = "g"
         self.d_layer[:] = "w"
+        
+    def no(self):
+        return self
 
     def u(self):
         temp = dc(self)
@@ -158,71 +160,126 @@ class cube:
         self.b().b()
         return self
     
+    def move(self,sequence=[]):
+        
+        moves = {0:self.no,
+                 1:self.r,    
+                 2:self.r_pr,    
+                 3:self.l,    
+                 4:self.l_pr,    
+                 
+                 5:self.f,
+                 6:self.f_pr,
+                 7:self.b,
+                 8:self.b_pr,
+                 
+                 9:self.u,    
+                 10:self.u_pr,    
+                 11:self.d,    
+                 12:self.d_pr, 
+                 
+                 13:self.u2,
+                 14:self.d2,
+                 15:self.l2,
+                 16:self.r2,
+                 17:self.f2,
+                 18:self.b2,
+                 }
+        
+        for i in sequence:
+            moves[i]()
+        
+        return self
+
+    
     def scramble(self,n,movelist):
-        for i in range(n):
-            rtd = rd.randint(1,18) #Inclus
-            if rtd == 1 or rtd == 0:
-                self.u()
-                movelist.append("U")
-            if rtd == 2:
-                self.u_pr()
-                movelist.append("U*")
-            if rtd == 3:
-                self.d()
-                movelist.append("D")
-            if rtd == 4:
-                self.d_pr()
-                movelist.append("D*")
-            if rtd == 5:
-                self.r()
-                movelist.append("R")
-            if rtd == 6:
-                self.r_pr()
-                movelist.append("R*")
-            if rtd == 7:
-                self.l()
-                movelist.append("L")
-            if rtd == 8:
-                self.l_pr()
-                movelist.append("L*")
-            if rtd == 9:
-                self.f()
-                movelist.append("F")
-            if rtd == 10:
-                self.f_pr()
-                movelist.append("F*")
-            if rtd == 11:
-                self.b()
-                movelist.append("B")
-            if rtd == 12:
-                self.b_pr()
-                movelist.append("B*")
-            if rtd == 13:
-                self.u2()
-                movelist.append("U2")
-            if rtd == 14:
-                self.d2()
-                movelist.append("D2")
-            if rtd == 15:
-                self.f2()
-                movelist.append("F2")
-            if rtd == 16:
-                self.b2()
-                movelist.append("B2")
-            if rtd == 17:
-                self.l2()
-                movelist.append("L2")
-            if rtd == 18:
-                self.r2()
-                movelist.append("R2")
+        
+        sequence = np.random.choice(np.arange(1,18+1,1),n)
+        self.move(sequence)
+        movelist.extend(sequence)
+
+        
         print(self)
-        nl()
-        print("Scramble: {}".format(movelist))
-        nl()
+        print()
+        print("Scramble: {}".format(sequencetoreadeable(movelist)))
+        print()
+        print("Solve: {}".format(sequencetoreadeable(invertsequence(movelist))))
+    
+    def unittest(self):
+        
+        if (self.move([1]) == self.r() and
+            self.move([2]) ==self.r_pr() and
+            self.move([3]) ==self.l() and
+            self.move([4]) ==self.l_pr() and
+            
+            self.move([5]) ==self.f() and
+            self.move([6]) ==self.f_pr() and
+            self.move([7]) ==self.b() and
+            self.move([8]) ==self.b_pr() and
+            
+            self.move([9]) ==self.u() and
+            self.move([10]) ==self.u_pr() and 
+            self.move([11]) ==self.d() and
+            self.move([12]) ==self.d_pr() and
+            
+            self.move([13]) ==self.u2() and
+            self.move([14]) ==self.d2() and
+            self.move([15]) ==self.l2() and
+            self.move([16]) ==self.r2() and
+            self.move([17]) ==self.f2() and
+            self.move([18]) ==self.b2()):
+            pass
+        
+        else:
+            
+            raise Exception("Unit test Failed")
     
     def __eq__(self,other):
-        return str(self.__dict__) == str(other.__dict__)
+        
+        condi = True
+        
+        selflayers = [self.u_layer,
+                self.f_layer,
+                self.l_layer,
+                self.b_layer,
+                self.r_layer,
+                self.d_layer,]
+        
+        otherlayers = [other.u_layer,
+                other.f_layer,
+                other.l_layer,
+                other.b_layer,
+                other.r_layer,
+                other.d_layer,]
+        
+        for i in range(len(selflayers)):
+            if False in (selflayers[i] == otherlayers[i]):
+                condi = False
+        
+        return condi
+        
     
     def __str__(self):
-        return str(self.__dict__)
+        names = ["U layer",
+                "F layer",
+                "L layer",
+                "B layer",
+                "R layer",
+                "D layer",]
+        
+        layers = [self.u_layer,
+                self.f_layer,
+                self.l_layer,
+                self.b_layer,
+                self.r_layer,
+                self.d_layer,]
+        
+        for i in range(len(layers)):
+            print(names[i])
+            print(layers[i])
+            print()
+        
+        return ""
+            
+        
 

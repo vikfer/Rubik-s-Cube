@@ -5,10 +5,8 @@ Created on Thu Apr 18 21:15:36 2019
 @author: victo_000
 """
 
-#tests
-
-
 from rubik_generator import rubix
+from rubik_cube_class import cube as cube_class
 
 color_u = rubix.u_layer[1,1] #Color 
 color_f = rubix.f_layer[1,1] #Color 
@@ -165,8 +163,8 @@ def test(face):
     str1 = ''.join(liste)
     return len(set(str1))==1
    
-def fullcheck(cube,solved):
-    if cube == solved:
+def fullcheck(cube):
+    if cube == cube_class():
         return True
     else:
         return False
