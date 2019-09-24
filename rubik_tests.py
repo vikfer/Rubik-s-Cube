@@ -5,15 +5,15 @@ Created on Thu Apr 18 21:15:36 2019
 @author: victo_000
 """
 
-from rubik_generator import rubix
 from rubik_cube_class import cube as cube_class
+cube = cube_class()
 
-color_u = rubix.u_layer[1,1] #Color 
-color_f = rubix.f_layer[1,1] #Color 
-color_l = rubix.l_layer[1,1] #Color 
-color_b = rubix.b_layer[1,1] #Color 
-color_r = rubix.r_layer[1,1] #Color 
-color_d = rubix.d_layer[1,1] #Color 
+color_u = cube.u_layer[1,1] #Color 
+color_f = cube.f_layer[1,1] #Color 
+color_l = cube.l_layer[1,1] #Color 
+color_b = cube.b_layer[1,1] #Color 
+color_r = cube.r_layer[1,1] #Color 
+color_d = cube.d_layer[1,1] #Color 
 
 def G0(cube):
     if (
